@@ -1,0 +1,19 @@
+{
+    "name": "lbottoni/facebookjwt",
+    "description": "wordpress plugin rest authentication with jwt",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Luca Bottoni",
+            "email": "lbottoni@libero.it"
+        }
+    ],
+    "require": {
+        "facebook/graph-sdk": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "WPSOCIALJWT\\": "/"
+        }
+    }
+}

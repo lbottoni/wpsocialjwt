@@ -2,7 +2,7 @@
 
 
 
-namespace WPSOCIALJWT\classes;
+namespace WPSOCIALJWT\Classes;
 
 use WPSOCIALJWT\Controller\FBJWT_Controller as FBJWT_Controller;
 

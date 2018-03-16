@@ -21,7 +21,7 @@ require_once plugin_dir_path(__FILE__) . "vendor/autoload.php";
 require_once plugin_dir_path(__FILE__) . "autoload.php";
 require_once __DIR__ . "/config.php";
 
-use WPSOCIALJWT\classes\FacebookJWT;
+use WPSOCIALJWT\Classes\FacebookJWT;
 
 class SocialJWT
 	{

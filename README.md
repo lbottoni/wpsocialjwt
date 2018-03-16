@@ -12,4 +12,5 @@ wordpress plugin rest auth facebook jwt
     const GOOGLE_APP_ID = "mygplusapp_id";
     const GOOGLE_APP_SECRET = "mygplusapp_secret";
   ```
-  
+  #Documetation Library
+  - GooglePlus SDK - https://github.com/google/google-api-php-client

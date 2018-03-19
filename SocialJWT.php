@@ -29,6 +29,11 @@
     protected $isactive = false;
     protected $fb;
     protected $google;
+    protected $domain="wpsocialjwt";
+    protected $menu_slug;
+    protected $submenu_slug_fb;
+    protected $submenu_slug_gp;
+    public $menu_position=2;
 
     public function __construct() {
       $this->isactive = get_option(__NAMESPACE__ . "_active");
@@ -37,7 +42,7 @@
         $this->fb = new FacebookJWT(FB_APP_ID, FB_APP_SECRET);
         //aggiungo il menu al pannello admin
         $this->add_actions();
-
+		$this->init();
 
       }
     }
@@ -51,10 +56,19 @@
     }
   public function init(){
       $lang=(defined(WPLANG))?WPLANG:"it_IT";
-     load_plugin_textdomain( 'wpsocialjwt', false, dirname(plugin_basename(__FILE__)).'/lang/' );
+	  load_plugin_textdomain($this->domain, false, basename( dirname( __FILE__ ) ) . '/lang');
+	$this->menu_slug="{$this->domain}_menu";
   }
     public function add_admin_menu() {
-      add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
+		$capability="";
+		$menu_slug="";
+		$function=null;
+		$icon_url="";
+		$position=null;
+
+      add_menu_page( __("Menu Social JWT Title",$this->domain), __("Menu Social JWT Title",$this->domain), "manage_options", $this->menu_slug, $function, $icon_url, $this->menu_position );
+      add_submenu_page($this->menu_slug,__("SubMenu Facebook JWT",$this->domain),__("SubMenu Facebook JWT",$this->domain),"manage_options",$this->submenu_slug_fb);
+      add_submenu_page($this->menu_slug,__("SubMenu Google plus JWT",$this->domain),__("SubMenu Google plus JWT",$this->domain),"manage_options",$this->submenu_slug_gp);
     }
   }
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wp plugin social JWT\n"
 "POT-Creation-Date: 2018-03-17 21:55+0100\n"
-"PO-Revision-Date: 2018-03-19 15:20+0100\n"
+"PO-Revision-Date: 2018-03-21 14:24+0100\n"
 "Last-Translator: Luca Bottoni <lbottoni@libero.it>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,3 +21,12 @@ msgstr "Facebook"
 
 msgid "SubMenu Google plus JWT"
 msgstr "Google plus"
+
+msgid "rest url descrizione"
+msgstr "Route GET Rest a cui passare il token. Se per esempio catturato il token autenticato lo vogliamo inviare in %1/facebookjwt/token , inserire facebookjwt/token nel campo"
+
+msgid "fb_appkey"
+msgstr "facebook APP KEY"
+
+msgid "fb_appsecret"
+msgstr "facebook APP SECRET"

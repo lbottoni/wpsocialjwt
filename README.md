@@ -14,3 +14,7 @@ wordpress plugin rest auth facebook jwt
   ```
   #Documetation Library
   - GooglePlus SDK - https://github.com/google/google-api-php-client
+  
+  #link 
+  https://tommcfarlin.com/save-wordpress-submenu-page-options/
+  https://codex.wordpress.org/Creating_Options_Pages

@@ -39,7 +39,7 @@ class SocialJWT
 
 	public function __construct()
 		{
-			$this->wp=$GLOBALS["wp"];
+			$this->wp = $GLOBALS["wp"];
 			$this->isactive = get_option(__NAMESPACE__ . "_active");
 			if ($this->isactive)
 				{
@@ -63,82 +63,134 @@ class SocialJWT
 		}
 
 	/**
-	 *  "type"	(string) The type of data associated with this setting. Valid values are "string", "boolean", "integer", and "number
-	 * "description" 	(string) A description of the data attached to this setting.
-	 * "sanitize_callback"	(callable) A callback function that sanitizes the option"s value.
-	 * "show_in_rest"	(bool) Whether data associated with this setting should be included in the REST API.
-	 * "default"	(mixed) Default value when calling get_option().
+	 *  "type"    (string) The type of data associated with this setting. Valid values are "string", "boolean", "integer", and "number
+	 * "description"    (string) A description of the data attached to this setting.
+	 * "sanitize_callback"    (callable) A callback function that sanitizes the option"s value.
+	 * "show_in_rest"    (bool) Whether data associated with this setting should be included in the REST API.
+	 * "default"    (mixed) Default value when calling get_option().
 	 */
-	public function register_settings(){
-		//registro i setting fb
+	public function register_settings()
+		{
+			//registro i setting fb
 
-		$defaults = array(
-			"type"              => "string",
-			"description"       => "",
-			"sanitize_callback" => null,
-			"show_in_rest"      => false
-		);
-		register_setting( "{$this->domain}_fb-group", "resturl" ,
-			array_merge($defaults,array("description"=>__("rest url descrizione",get_site_url(null,"/wp-json/wp/v2"))))
-		);
-		register_setting( "{$this->domain}_fb-group", "appkey",array_merge($defaults,array("description"=>__("fb_appkey"))) );
-		register_setting( "{$this->domain}_fb-group", "appsecret", array_merge($defaults,array("description"=>__("fb_appsecret"))) );
-		//setting s gplus
-		register_setting( "{$this->domain}_gplus-group", "resturl" ,
-			array_merge($defaults,array("description"=>__("rest url descrizione",get_site_url(null,"/wp-json/wp/v2"))))
+			$defaults = array("type" => "string",
+							  "description" => "",
+							  "sanitize_callback" => null,
+							  "show_in_rest" => false
 			);
-		register_setting( "{$this->domain}_gplus-group", "appkey" );
-		register_setting( "{$this->domain}_gplus-group", "appsecret" );
+			register_setting("{$this->domain}_fb-group",
+				"resturl"//			,array_merge($defaults,array("description"=>__("rest url descrizione",get_site_url(null,"/wp-json/wp/v2"))))
+			);
+			register_setting("{$this->domain}_fb-group",
+				"appkey"/*, array_merge($defaults,array("description"=>__("fb_appkey")))*/);
+			register_setting("{$this->domain}_fb-group",
+				"appsecret"/*, array_merge($defaults,array("description"=>__("fb_appsecret")))*/);
+			//setting s gplus
+			//		register_setting( "{$this->domain}_gplus-group", "resturl" /*,
+			//			array_merge($defaults,array("description"=>__("rest url descrizione",get_site_url(null,"/wp-json/wp/v2"))))*/
+			//			);
+			//		register_setting( "{$this->domain}_gplus-group", "appkey" );
+			//		register_setting( "{$this->domain}_gplus-group", "appsecret" );
+			register_setting('my_option_group', // Option group
+				'my_option_name', // Option name
+				array($this, 'sanitize') // Sanitize
+			);
+
+			add_settings_section('setting_section_id', // ID
+				'My Custom Settings', // Title
+				function () {
+					echo "hello";
+				},
+				'my-setting-admin' // Page
+			);
+
+			add_settings_field('id_number', // ID
+				'ID Number', // Title
+				function () {
+					printf('<input type="text" id="id_number" name="my_option_name[id_number]" value="%s" />',
+						isset($this->options['id_number']) ? esc_attr($this->options['id_number']) : '');
+				},
+				'my-setting-admin', // Page
+				'setting_section_id' // Section
+			);
+
+			add_settings_field('title', 'Title',
+				function () {
+					printf('<input type="text" id="title" name="my_option_name[title]" value="%s" />',
+						isset($this->options['title']) ? esc_attr($this->options['title']) : '');
+				},
+				'my-setting-admin',
+			'setting_section_id'
+		);
 	}
 	public function init()
-		{
-			$lang = (defined(WPLANG)) ? WPLANG : "it_IT";
-			load_plugin_textdomain($this->domain, false, basename(dirname(__FILE__)) . "/lang");
-			$this->menu_slug = "{$this->domain}_menu";
-		}
+			{
+				$lang = (defined(WPLANG)) ? WPLANG : "it_IT";
+				load_plugin_textdomain($this->domain, false, basename(dirname(__FILE__)) . "/lang");
+				$this->menu_slug = "{$this->domain}_menu";
+			}
 
 	public function add_admin_menu()
-		{
-			$capability = "";
-			$menu_slug = "";
-			$function = null;
-			$icon_url = "";
-			$position = null;
+			{
+				$capability = "";
+				$menu_slug = "";
+				$function = null;
+				$icon_url = "";
+				$position = null;
 
-			add_menu_page(__("Menu Social JWT Title", $this->domain),
-				__("Menu Social JWT Title", $this->domain),
-				"manage_options",
-				$this->menu_slug,
-				null,
-				$icon_url,
-				$this->menu_position);
-			add_submenu_page($this->menu_slug,
-				__("SubMenu Facebook JWT", $this->domain),
-				__("SubMenu Facebook JWT", $this->domain),
-				"manage_options",
-				$this->submenu_slug_fb,
-				array($this,"view_fb"));
-			add_submenu_page($this->menu_slug,
-				__("SubMenu Google plus JWT", $this->domain),
-				__("SubMenu Google plus JWT", $this->domain),
-				"manage_options",
-				$this->submenu_slug_gp,
-				array($this,"view_fb"));
-		}
-		public function view_fb(){
-			include_once "view/admin_fb.php";
-		}
+				add_menu_page(__("Menu Social JWT Title", $this->domain),
+					__("Menu Social JWT Title", $this->domain),
+					"manage_options",
+					$this->menu_slug,
+					null,
+					$icon_url,
+					$this->menu_position);
+//
+//				add_options_page(
+//					'Official Deved Options Plugin',
+//					'Deved Options',
+//					'manage_options',
+//					$this->menu_slug."_opt",
+//					function(){
+//						if( !current_user_can( 'manage_options' ) ) {
+//
+//						wp_die( 'I tuoi permessi non sono sufficienti per visualizzare la pagina' );
+//
+//						}
+//
+//						echo '<p>Benvenuto in questo plugin!</p>';
+//					}
+//				);
+
+
+				add_submenu_page($this->menu_slug,
+					__("SubMenu Facebook JWT", $this->domain),
+					__("SubMenu Facebook JWT", $this->domain),
+					"manage_options",
+					$this->submenu_slug_fb,
+					array($this, "view_fb"));
+				add_submenu_page($this->menu_slug,
+					__("SubMenu Google plus JWT", $this->domain),
+					__("SubMenu Google plus JWT", $this->domain),
+					"manage_options",
+					$this->submenu_slug_gp,
+					array($this, "view_fb"));
+			}
+		public function view_fb()
+			{
+				include_once "view/admin_fb.php";
+			}
 
 	}
 
 
-register_activation_hook(__FILE__,
-	function () {
+register_activation_hook(__FILE__, function ()
+	{
 		update_option(__NAMESPACE__ . "_active", true);
 	});
 
-register_deactivation_hook(__FILE__,
-	function () {
+register_deactivation_hook(__FILE__, function ()
+	{
 		update_option(__NAMESPACE__ . "_active", false);
 	});
 new SocialJWT();

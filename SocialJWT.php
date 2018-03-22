@@ -69,7 +69,33 @@ class SocialJWT
 	 * "show_in_rest"    (bool) Whether data associated with this setting should be included in the REST API.
 	 * "default"    (mixed) Default value when calling get_option().
 	 */
+
 	public function register_settings()
+		{
+			add_settings_section("id_setting_section", // ID per la sezione e i campi
+				"Title add_settings_section",
+				array($this, "section_callback_function"),
+				"mypage" // Sezione sotto "Settings/Impostazioni" dove inserirla
+			);
+			add_settings_field("my_test",
+				"Title add_settings_field",
+				array($this,"field_callback_function"),
+				"mypage",
+				"id_setting_section");
+			register_setting( 'mygroup', 'my_test' );			// Registra l’opzione my_test in modo che $_POST venga gestito automaticamente
+		}
+
+	public function field_callback_function()
+		{
+			echo '<input type="text" name="my_test" value="'. get_option( "my_test" ).'" />';
+		}
+
+	public function section_callback_function()
+		{
+			_e( "Test", 'my-plugin' );
+		}
+
+	public function _register_settings()
 		{
 			//registro i setting fb
 
@@ -91,43 +117,44 @@ class SocialJWT
 			//			);
 			//		register_setting( "{$this->domain}_gplus-group", "appkey" );
 			//		register_setting( "{$this->domain}_gplus-group", "appsecret" );
-			register_setting('my_option_group', // Option group
-				'my_option_name', // Option name
-				array($this, 'sanitize') // Sanitize
+			register_setting("my_option_group", // Option group
+				"my_option_name", // Option name
+				array($this, "sanitize") // Sanitize
 			);
 
-			add_settings_section('setting_section_id', // ID
-				'My Custom Settings', // Title
+			add_settings_section("setting_section_id", // ID
+				"My Custom Settings", // Title
 				function () {
 					echo "hello";
 				},
-				'my-setting-admin' // Page
+				"my-setting-admin" // Page
 			);
 
-			add_settings_field('id_number', // ID
-				'ID Number', // Title
+			add_settings_field("id_number", // ID
+				"ID Number", // Title
 				function () {
-					printf('<input type="text" id="id_number" name="my_option_name[id_number]" value="%s" />',
-						isset($this->options['id_number']) ? esc_attr($this->options['id_number']) : '');
+					printf('<input type="ext" id="id_number" name="my_option_name[id_number]" value=" % s" />',
+						isset($this->options["id_number"]) ? esc_attr($this->options["id_number"]) : "");
 				},
-				'my-setting-admin', // Page
-				'setting_section_id' // Section
+				"my - setting - admin", // Page
+				"setting_section_id" // Section
 			);
 
-			add_settings_field('title', 'Title',
+			add_settings_field("title", "Title",
 				function () {
-					printf('<input type="text" id="title" name="my_option_name[title]" value="%s" />',
-						isset($this->options['title']) ? esc_attr($this->options['title']) : '');
+					printf('<input type="text" id="title" name="my_option_name[title]" value=" % s" />',
+						isset($this->options["title"]) ? esc_attr($this->options["title"]) : "");
 				},
-				'my-setting-admin',
-			'setting_section_id'
+				"my - setting - admin",
+			"setting_section_id"
 		);
 	}
 	public function init()
 			{
 				$lang = (defined(WPLANG)) ? WPLANG : "it_IT";
-				load_plugin_textdomain($this->domain, false, basename(dirname(__FILE__)) . "/lang");
-				$this->menu_slug = "{$this->domain}_menu";
+				load_plugin_textdomain($this->domain, false, basename(dirname(__FILE__)) . " / lang");
+				$this->menu_slug = "{
+					$this->domain}_menu";
 			}
 
 	public function add_admin_menu()
@@ -147,18 +174,18 @@ class SocialJWT
 					$this->menu_position);
 //
 //				add_options_page(
-//					'Official Deved Options Plugin',
-//					'Deved Options',
-//					'manage_options',
+//					"Official Deved Options Plugin",
+//					"Deved Options",
+//					"manage_options",
 //					$this->menu_slug."_opt",
 //					function(){
-//						if( !current_user_can( 'manage_options' ) ) {
+//						if( !current_user_can( "manage_options" ) ) {
 //
-//						wp_die( 'I tuoi permessi non sono sufficienti per visualizzare la pagina' );
+//						wp_die( "I tuoi permessi non sono sufficienti per visualizzare la pagina" );
 //
 //						}
 //
-//						echo '<p>Benvenuto in questo plugin!</p>';
+//						echo " < p>Benvenuto in questo plugin!</p > ";
 //					}
 //				);
 

@@ -78,13 +78,24 @@ class SocialJWT
 				"mypage" // Sezione sotto "Settings/Impostazioni" dove inserirla
 			);
 			add_settings_field("my_test",
-				"Title add_settings_field",
-				array($this,"field_callback_function"),
+			"Title add_settings_field",
+			array($this,"field_callback_function"),
+			"mypage",
+			"id_setting_section");
+			//------------------------------------------------
+			add_settings_field("my_test2",
+				"Title add_settings_field 2",
+				array($this,"field_callback_function2"),
 				"mypage",
 				"id_setting_section");
+			//------------------------------------------------
 			register_setting( 'mygroup', 'my_test' );			// Registra l’opzione my_test in modo che $_POST venga gestito automaticamente
+			register_setting( 'mygroup', 'my_test2' );
 		}
-
+	public function field_callback_function2()
+		{
+			echo '<input type="text" name="my_test2" value="'. get_option( "my_test2" ).'" />';
+		}
 	public function field_callback_function()
 		{
 			echo '<input type="text" name="my_test" value="'. get_option( "my_test" ).'" />';

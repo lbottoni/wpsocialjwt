@@ -6,8 +6,8 @@
     <h5>my_option_name: <?php 	echo get_option( 'my_option_name' ); ?></h5>
 	<form method="post" action="options.php">
 		<?php
-		settings_fields( 'mygroup' );
-		do_settings_sections( 'mypage' );
+		settings_fields( 'fbgroup' );
+		do_settings_sections( 'fb_page' );
 		submit_button();
 		?>
 

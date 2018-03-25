@@ -4,12 +4,14 @@ namespace WPSOCIALJWT\Controller;
 
 class FBJWT_Controller extends \WP_REST_Controller
 	{
+	public $namespace=  "wp/v2";
+	public $routeurl=  "facebookjwt/token";
 	protected  $app_id=null;
 	protected  $app_secret=null;
 	function __construct($app_id,$app_secret)
 		{
-			$this->namespace = "wp/v2";
-			$this->routeurl="facebookjwt/token";
+			//$this->namespace = "wp/v2";
+//			$this->routeurl="facebookjwt/token";
 			$this->app_id=$app_id;
 			$this->app_secret=$app_secret;
 			add_action("rest_api_init", array($this, "register_routes"));

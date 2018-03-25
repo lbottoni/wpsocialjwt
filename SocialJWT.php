@@ -28,7 +28,7 @@ class SocialJWT
 	{
 
 	protected $isactive = false;
-	protected $fb;
+	public $fb;
 	protected $google;
 	protected $domain = "wpsocialjwt";
 	protected $menu_slug;
@@ -72,38 +72,54 @@ class SocialJWT
 
 	public function register_settings()
 		{
-			add_settings_section("id_setting_section", // ID per la sezione e i campi
-				"Title add_settings_section",
+			add_settings_section("id_setting_section_fb", // ID per la sezione e i campi
+				"Configurazione rest endpoint facebook",
 				array($this, "section_callback_function"),
-				"mypage" // Sezione sotto "Settings/Impostazioni" dove inserirla
+				"fb_page" // Sezione sotto "Settings/Impostazioni" dove inserirla
 			);
-			add_settings_field("my_test",
-			"Title add_settings_field",
-			array($this,"field_callback_function"),
-			"mypage",
-			"id_setting_section");
-			//------------------------------------------------
-			add_settings_field("my_test2",
-				"Title add_settings_field 2",
-				array($this,"field_callback_function2"),
-				"mypage",
-				"id_setting_section");
-			//------------------------------------------------
-			register_setting( 'mygroup', 'my_test' );			// Registra l’opzione my_test in modo che $_POST venga gestito automaticamente
-			register_setting( 'mygroup', 'my_test2' );
-		}
-	public function field_callback_function2()
-		{
-			echo '<input type="text" name="my_test2" value="'. get_option( "my_test2" ).'" />';
-		}
-	public function field_callback_function()
-		{
-			echo '<input type="text" name="my_test" value="'. get_option( "my_test" ).'" />';
-		}
 
+			if(get_option("{$this->domain}_endpoint_fb")==false){
+				update_option("{$this->domain}_endpoint_fb","{$this->fb->routeurl}");
+			}
+			//$endpoint= (get_option("{$this->domain}_endpoint_fb"))?"{$this->domain}_endpoint_fb":get_option( 'siteurl' )."/{$this->fb->namespace}/{$this->fb->routeurl}";
+			//◙◙◙◙◙◙◙◙ endpoint ◙◙◙◙◙◙◙◙
+			add_settings_field("{$this->domain}_endpoint_fb",
+				"Facebook rest end point",
+				array($this,"field_callback_endpoint_fb"),
+				"fb_page",
+				"id_setting_section_fb");
+			//◙◙◙◙◙◙◙◙ appid_fb ◙◙◙◙◙◙◙◙
+			add_settings_field("{$this->domain}_appid_fb",
+				"Facebook APP ID",
+				array($this,"field_callback_appid_fb"),
+				"fb_page",
+				"id_setting_section_fb");
+			//◙◙◙◙◙◙◙◙ appsecret_fb ◙◙◙◙◙◙◙◙
+			add_settings_field("{$this->domain}_appsecret_fb",
+				"Facebook APP SECRET",
+				array($this,"field_callback_appsecret_fb"),
+				"fb_page",
+				"id_setting_section_fb");
+			//------------------------------------------------
+			register_setting( 'fbgroup', "{$this->domain}_endpoint_fb" );			// Registra l’opzione my_test in modo che $_POST venga gestito automaticamente
+			register_setting( 'fbgroup', "{$this->domain}_appid_fb");
+			register_setting( 'fbgroup', "{$this->domain}_appsecret_fb");
+		}
+	public function field_callback_endpoint_fb()
+		{
+			echo "<input type=\"text\" name=\"{$this->domain}_endpoint_fb\" value=\"" . get_option("{$this->domain}_endpoint_fb") . "\" />";
+		}
+	public function field_callback_appid_fb()
+		{
+			echo "<input type=\"text\" name=\"{$this->domain}_appid_fb\" value=\"" . get_option("{$this->domain}_appid_fb") . "\" />";
+		}
+	public function field_callback_appsecret_fb()
+		{
+			echo "<input type=\"text\" name=\"{$this->domain}_appsecret_fb\" value=\"" . get_option("{$this->domain}_appsecret_fb") . "\" />";
+		}
 	public function section_callback_function()
 		{
-			_e( "Test", 'my-plugin' );
+			_e( "url endpoint: ".get_option( "siteurl" )."/{$this->fb->namespace}/{$this->fb->routeurl}/".get_option( "{$this->domain}_endpoint_fb" ), $this->domain);
 		}
 
 	public function _register_settings()
@@ -214,7 +230,7 @@ class SocialJWT
 					$this->submenu_slug_gp,
 					array($this, "view_fb"));
 			}
-		public function view_fb()
+	public function view_fb()
 			{
 				include_once "view/admin_fb.php";
 			}

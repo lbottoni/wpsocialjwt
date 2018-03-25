@@ -7,7 +7,7 @@ namespace WPSOCIALJWT\Classes;
 use WPSOCIALJWT\Controller\FBJWT_Controller as FBJWT_Controller;
 
 
-class FacebookJWT
+class FacebookJWT extends FBJWT_Controller
 	{
 
 	/**
@@ -16,8 +16,9 @@ class FacebookJWT
 	 *
 	 * FacebookJWT constructor.
 	 */
-	public function __construct()
+	public function __construct($FB_APP_ID,$FB_APP_SECRET)
 		{
-			new FBJWT_Controller(FB_APP_ID,FB_APP_SECRET);
+			parent::__construct($FB_APP_ID,$FB_APP_SECRET);
+			//new FBJWT_Controller(FB_APP_ID,FB_APP_SECRET);
 		}
 	}

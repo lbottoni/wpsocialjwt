@@ -5,10 +5,11 @@
 namespace WPSOCIALJWT\Classes;
 
 use WPSOCIALJWT\Controller\FBJWT_Controller as FBJWT_Controller;
-
+use WPSOCIALJWT\Classes\FacebookTemplate;
 
 class FacebookJWT extends FBJWT_Controller
 	{
+	use FacebookTemplate;
 
 	/**
 	 * https://stionic.com

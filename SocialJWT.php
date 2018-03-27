@@ -30,7 +30,7 @@ class SocialJWT
 	protected $isactive = false;
 	public $fb;
 	protected $google;
-	protected $domain = "wpsocialjwt";
+	public static $domain = "wpsocialjwt";
 	protected $menu_slug;
 	protected $submenu_slug_fb;
 	protected $submenu_slug_gp;
@@ -62,102 +62,9 @@ class SocialJWT
 			add_action("admin_init", array($this, "register_settings"));
 		}
 
-	/**
-	 *  "type"    (string) The type of data associated with this setting. Valid values are "string", "boolean", "integer", and "number
-	 * "description"    (string) A description of the data attached to this setting.
-	 * "sanitize_callback"    (callable) A callback function that sanitizes the option"s value.
-	 * "show_in_rest"    (bool) Whether data associated with this setting should be included in the REST API.
-	 * "default"    (mixed) Default value when calling get_option().
-	 */
-
-	public function register_settings()
-		{
-			add_settings_section("id_setting_section_fb", // ID per la sezione e i campi
-				"Configurazione rest endpoint facebook",
-				array($this, "section_callback_function"),
-				"fb_page" // Sezione sotto "Settings/Impostazioni" dove inserirla
-			);
-
-			if (get_option("{$this->domain}_endpoint_fb") == false)
-				{
-				update_option("{$this->domain}_endpoint_fb", "{$this->fb->routeurl}");
-				}
-			//$endpoint= (get_option("{$this->domain}_endpoint_fb"))?"{$this->domain}_endpoint_fb":get_option( 'siteurl' )."/{$this->fb->namespace}/{$this->fb->routeurl}";
-			//◙◙◙◙◙◙◙◙ endpoint ◙◙◙◙◙◙◙◙
-			add_settings_field("{$this->domain}_endpoint_fb",
-				"Facebook rest end point",
-				array($this, "field_callback_endpoint_fb"),
-				"fb_page",
-				"id_setting_section_fb");
-			//◙◙◙◙◙◙◙◙ appid_fb ◙◙◙◙◙◙◙◙
-			add_settings_field("{$this->domain}_appid_fb",
-				"Facebook APP ID",
-				array($this, "field_callback_appid_fb"),
-				"fb_page",
-				"id_setting_section_fb");
-			//◙◙◙◙◙◙◙◙ appsecret_fb ◙◙◙◙◙◙◙◙
-			add_settings_field("{$this->domain}_appsecret_fb",
-				"Facebook APP SECRET",
-				array($this, "field_callback_appsecret_fb"),
-				"fb_page",
-				"id_setting_section_fb",
-				array('label_for' => 'myprefix_setting-id'));
-			//------------------------------------------------
-			$defaults = array("type" => "string",
-							  "description" => "",
-							  "sanitize_callback" => null,
-							  "show_in_rest" => false
-			);
-			// array_merge($defaults,array("description"=>__("rest url descrizione",get_site_url(null,"/wp-json/wp/v2"))));
-			register_setting('fbgroup',
-				"{$this->domain}_endpoint_fb",
-				array($this, "sanitize_endpoint")
-//				array_merge($defaults,
-//					array("description" => "bla bla bla bla bla bla bla bla bla bla bla bla ",
-//						  "sanitize_callback" => array($this, "sanitize_endpoint")
-//					))
-			);
-			// Registra l’opzione my_test in modo che $_POST venga gestito automaticamente
-			register_setting('fbgroup', "{$this->domain}_appid_fb");
-			register_setting('fbgroup', "{$this->domain}_appsecret_fb");
-		}
-
-	public function sanitize_endpoint($data)
-		{
-			if (null !== $data)
-				{
-				add_settings_error(
-					"fb_page",
-					'empty',
-					'Cannot be empty',
-					'error'
-				);
-				}
-
-			return sanitize_text_field($data);
-
-		}
-
-	public function field_callback_endpoint_fb()
-		{
-			echo "<input type=\"text\" name=\"{$this->domain}_endpoint_fb\" value=\"" . esc_attr(get_option("{$this->domain}_endpoint_fb")) . "\" />";
-		}
-
-	public function field_callback_appid_fb()
-		{
-			echo "<input type=\"text\" name=\"{$this->domain}_appid_fb\" value=\"" . esc_attr(get_option("{$this->domain}_appid_fb")) . "\" />";
-		}
-
-	public function field_callback_appsecret_fb($data)
-		{
-			echo "<input type=\"password\" name=\"{$this->domain}_appsecret_fb\" value=\"" . esc_attr(get_option("{$this->domain}_appsecret_fb")) . "\" />";
-		}
-
-	public function section_callback_function()
-		{
-			_e("url endpoint: " . get_option("siteurl") . "/{$this->fb->namespace}/{$this->fb->routeurl}/" . get_option("{$this->domain}_endpoint_fb") . "/<b>{yourtoken_facebook}</b>",
-				$this->domain);
-		}
+	public function register_settings(){
+		$this->fb->register_settings();
+	}
 
 	public function _register_settings()
 		{
@@ -220,9 +127,8 @@ class SocialJWT
 	public function init()
 		{
 			$lang = (defined(WPLANG)) ? WPLANG : "it_IT";
-			load_plugin_textdomain($this->domain, false, basename(dirname(__FILE__)) . " / lang");
-			$this->menu_slug = "{
-					$this->domain}_menu";
+			load_plugin_textdomain(self::$domain, false, basename(dirname(__FILE__)) . " / lang");
+			$this->menu_slug = self::$domain."_menu";
 		}
 
 	public function add_admin_menu()
@@ -233,8 +139,8 @@ class SocialJWT
 			$icon_url = "";
 			$position = null;
 
-			add_menu_page(__("Menu Social JWT Title", $this->domain),
-				__("Menu Social JWT Title", $this->domain),
+			add_menu_page(__("Menu Social JWT Title",  self::$domain),
+				__("Menu Social JWT Title",  self::$domain),
 				"manage_options",
 				$this->menu_slug,
 				null,
@@ -259,14 +165,14 @@ class SocialJWT
 
 
 			add_submenu_page($this->menu_slug,
-				__("SubMenu Facebook JWT", $this->domain),
-				__("SubMenu Facebook JWT", $this->domain),
+				__("SubMenu Facebook JWT",  self::$domain),
+				__("SubMenu Facebook JWT",  self::$domain),
 				"manage_options",
 				$this->submenu_slug_fb,
 				array($this, "view_fb"));
 			add_submenu_page($this->menu_slug,
-				__("SubMenu Google plus JWT", $this->domain),
-				__("SubMenu Google plus JWT", $this->domain),
+				__("SubMenu Google plus JWT",  self::$domain),
+				__("SubMenu Google plus JWT",  self::$domain),
 				"manage_options",
 				$this->submenu_slug_gp,
 				array($this, "view_fb"));

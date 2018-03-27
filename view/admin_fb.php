@@ -1,4 +1,3 @@
-<h2>The heading of my settings page</h2>
 <?php settings_errors(); ?>
 
 <div class="wrap">

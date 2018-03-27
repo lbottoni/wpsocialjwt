@@ -62,9 +62,10 @@ class SocialJWT
 			add_action("admin_init", array($this, "register_settings"));
 		}
 
-	public function register_settings(){
-		$this->fb->register_settings();
-	}
+	public function register_settings()
+		{
+			$this->fb->register_settings();
+		}
 
 	public function _register_settings()
 		{
@@ -127,8 +128,8 @@ class SocialJWT
 	public function init()
 		{
 			$lang = (defined(WPLANG)) ? WPLANG : "it_IT";
-			load_plugin_textdomain(self::$domain, false, basename(dirname(__FILE__)) . " / lang");
-			$this->menu_slug = self::$domain."_menu";
+			load_plugin_textdomain(self::$domain, false, basename(dirname(__FILE__)) . "/lang");
+			$this->menu_slug = self::$domain . "_menu";
 		}
 
 	public function add_admin_menu()
@@ -139,8 +140,8 @@ class SocialJWT
 			$icon_url = "";
 			$position = null;
 
-			add_menu_page(__("Menu Social JWT Title",  self::$domain),
-				__("Menu Social JWT Title",  self::$domain),
+			add_menu_page(__("Menu Social JWT Title", self::$domain),
+				__("Menu Social JWT Title", self::$domain),
 				"manage_options",
 				$this->menu_slug,
 				null,
@@ -165,14 +166,14 @@ class SocialJWT
 
 
 			add_submenu_page($this->menu_slug,
-				__("SubMenu Facebook JWT",  self::$domain),
-				__("SubMenu Facebook JWT",  self::$domain),
+				__("SubMenu Facebook JWT", self::$domain),
+				__("SubMenu Facebook JWT", self::$domain),
 				"manage_options",
 				$this->submenu_slug_fb,
 				array($this, "view_fb"));
 			add_submenu_page($this->menu_slug,
-				__("SubMenu Google plus JWT",  self::$domain),
-				__("SubMenu Google plus JWT",  self::$domain),
+				__("SubMenu Google plus JWT", self::$domain),
+				__("SubMenu Google plus JWT", self::$domain),
 				"manage_options",
 				$this->submenu_slug_gp,
 				array($this, "view_fb"));

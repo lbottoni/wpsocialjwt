@@ -1,6 +1,7 @@
 <?php
 namespace WPSOCIALJWT\Controller;
-
+use WPSOCIALJWT\SocialJWT;
+use WPSOCIALJWT\Classes\Response;
 
 class FBJWT_Controller extends \WP_REST_Controller
 	{
@@ -14,6 +15,8 @@ class FBJWT_Controller extends \WP_REST_Controller
 //			$this->routeurl="facebookjwt/token";
 			$this->app_id=$app_id;
 			$this->app_secret=$app_secret;
+			$endpoint=get_option(SocialJWT::$domain . "_endpoint_fb");
+			$this->routeurl=($endpoint)?$endpoint:$this->routeurl;
 			add_action("rest_api_init", array($this, "register_routes"));
 		}
 
@@ -32,22 +35,6 @@ class FBJWT_Controller extends \WP_REST_Controller
 					  )
 					  )
 				));
-			// array(
-			//						"username" => array(
-			//							"required" => true,
-			//							"sanitize_callback" => "esc_sql"
-			//						),
-			//						"token" => array(
-			//							"required" => true,
-			//							"sanitize_callback" => "esc_sql"
-			//						),
-			//						"email" => array(
-			//							"required" => true,
-			//							"sanitize_callback" => "esc_sql"
-			//						)
-			//					),
-
-			//				));
 		}
 
 	public function token(\WP_REST_Request $request)
@@ -93,6 +80,7 @@ class FBJWT_Controller extends \WP_REST_Controller
 				} catch (\Facebook\Exceptions\FacebookResponseException $e)
 				{
 				// When Graph returns an error
+				Response::error($e->getMessage());
 				echo 'Graph returned an error: ' . $e->getMessage();
 				exit;
 				} catch (\Facebook\Exceptions\FacebookSDKException $e)

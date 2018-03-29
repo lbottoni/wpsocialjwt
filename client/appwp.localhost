@@ -1,0 +1,35 @@
+# this is a example  vhost for xamp
+#
+# add in .htaccess root folder
+# Header set Access-Control-Allow-Origin "*"
+#
+# add in window host
+# 127.0.0.1 appwp.localhost
+#
+Define myhost appwp
+Define DocumentRoot ${xampproot}/htdocs/${myhost}
+Define hostextension localhost
+
+<VirtualHost *:80>
+		ServerAdmin ${myhost}@${hostextension}
+
+		ServerName  ${myhost}.${hostextension}
+		ServerAlias www.${myhost}.${hostextension} ${myhost}.${hostextension}.com
+
+		DocumentRoot ${DocumentRoot}
+
+		DirectoryIndex index.php index.html index.htm
+
+		<Directory />
+			Options FollowSymLinks
+			AllowOverride All
+			Order allow,deny
+			Allow from all		
+			Require all granted			
+        </Directory>
+
+		# Ricordarsi di creare la directory
+		ErrorLog  ${xampproot}/logs/${myhost}.${hostextension}.error.log
+		CustomLog ${xampproot}/logs/${myhost}.${hostextension}.access.log combined
+
+</VirtualHost

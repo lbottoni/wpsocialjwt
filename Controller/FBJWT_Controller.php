@@ -5,6 +5,7 @@ use WPSOCIALJWT\Classes\Response;
 
 class FBJWT_Controller extends \WP_REST_Controller
 	{
+	//use Response;
 	public $namespace=  "wp/v2";
 	public $routeurl=  "facebookjwt/token";
 	protected  $app_id=null;
@@ -80,9 +81,10 @@ class FBJWT_Controller extends \WP_REST_Controller
 				} catch (\Facebook\Exceptions\FacebookResponseException $e)
 				{
 				// When Graph returns an error
-				Response::error($e->getMessage());
+//				return new \WP_REST_Response(["a" => 1], 200);exit;
+				return Response::error($e->getMessage());exit;
 				echo 'Graph returned an error: ' . $e->getMessage();
-				exit;
+
 				} catch (\Facebook\Exceptions\FacebookSDKException $e)
 				{
 				// When validation fails or other local issues

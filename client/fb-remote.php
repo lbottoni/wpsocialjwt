@@ -23,7 +23,7 @@ require_once "C:/xampp/htdocs/wptravel/wp-content/plugins/socialjwt/config.php";
 				var endpoint = "/wp-json/wp/v2/facebookjwt/token";
 				jQuery.ajax({
 								url:url + endpoint + "/" + token
-							}).done(function(data) {console.log("JQuery dat: ", data);});
+							}).done(function(data) {console.log("JQuery data: ", data);});
 			}
 			else {
 				alert("User cancelled login or did not fully authorize.");

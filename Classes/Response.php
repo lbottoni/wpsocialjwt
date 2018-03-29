@@ -9,7 +9,7 @@
 namespace WPSOCIALJWT\Classes;
 
 
-class Response extends \WP_REST_Response
+class Response
 	{
 	private $message;
 	private $success;
@@ -37,19 +37,20 @@ class Response extends \WP_REST_Response
 
 	private function _message($type, $message = null)
 		{
-			$resp=new \stdClass();
-			$resp->success=($type==="success");
-			$resp->messagge=(empty($message))?"":$message;
-			$data= ($this->toJson)?json_encode($resp):$resp;
-			return $data;
+			$resp=array();
+			$resp["success"]=($type==="success");
+			$resp["message"]=(empty($message))?"":$message;
+			//$data= (self::$toJson)?json_encode($resp):$resp;
+			return $resp;
 		}
-
 	public static function success($message = null)
 		{
-			return Response::_message("success", $message);
+			$data=Response::_message("success", $message);
+			return  new \WP_REST_Response($data,400);
 		}
 	public static function error($message = null)
 		{
-			return Response::_message("error", $message);
+			$data=Response::_message("error", $message);
+			return new \WP_REST_Response($data,400);
 		}
 	}

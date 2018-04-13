@@ -46,11 +46,11 @@ class Response
 	public static function success($message = null)
 		{
 			$data=Response::_message("success", $message);
-			return  new \WP_REST_Response($data,400);
+			return  new \WP_REST_Response($data,200);
 		}
-	public static function error($message = null)
+	public static function error($message = null,$code=400)
 		{
 			$data=Response::_message("error", $message);
-			return new \WP_REST_Response($data,400);
+			return new \WP_REST_Response($data,$code);
 		}
 	}

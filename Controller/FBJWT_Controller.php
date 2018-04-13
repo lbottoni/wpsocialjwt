@@ -83,31 +83,30 @@ class FBJWT_Controller extends \WP_REST_Controller
 				// When Graph returns an error
 //				return new \WP_REST_Response(["a" => 1], 200);exit;
 				return Response::error($e->getMessage());exit;
-				echo 'Graph returned an error: ' . $e->getMessage();
+//				echo 'Graph returned an error: ' . $e->getMessage();
 
 				} catch (\Facebook\Exceptions\FacebookSDKException $e)
 				{
 				// When validation fails or other local issues
-				echo 'Facebook SDK returned an error: ' . $e->getMessage();
-				exit;
+				return Response::error($e->getMessage());exit;
+//				echo 'Facebook SDK returned an error: ' . $e->getMessage();
+//				exit;
 				}
 
 			if (!isset($accessToken))
 				{
 				if ($helper->getError())
 					{
-					header('HTTP/1.0 401 Unauthorized');
-					echo "Error: " . $helper->getError() . "\n";
-					echo "Error Code: " . $helper->getErrorCode() . "\n";
-					echo "Error Reason: " . $helper->getErrorReason() . "\n";
-					echo "Error Description: " . $helper->getErrorDescription() . "\n";
+					$error["error"]=$helper->getError();
+					$error["errorCode"]=$helper->getErrorCode();
+					$error["errorReason"]=$helper->getErrorReason();
+					$error["errorDescription"]=$helper->getErrorDescription();
+					return Response::error($error,401);exit;
 					}
 				else
 					{
-					header('HTTP/1.0 400 Bad Request');
-					echo 'Bad request';
+					return Response::error("Bad Request");exit;
 					}
-				exit;
 				}
 			$user = $response->getGraphUser();
 			return new \WP_REST_Response(["a" => 1,
